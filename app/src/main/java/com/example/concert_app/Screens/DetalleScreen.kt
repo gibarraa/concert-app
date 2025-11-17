@@ -1,7 +1,10 @@
 package com.example.concert_app.Screens
 
+import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.example.concert_app.viewmodels.DetalleViewModel
 
-fun DetalleScreen(id: String, navController: NavController){
+@Composable
+fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleViewModel){
 
 }
