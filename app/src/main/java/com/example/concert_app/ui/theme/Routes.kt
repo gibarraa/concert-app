@@ -13,3 +13,10 @@ object Favoritos
 
 @Serializable
 object Perfil
+
+@Serializable
+object Purchase
+
+
+@Serializable
+object PurchaseConfirmed
