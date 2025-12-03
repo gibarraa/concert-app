@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel @Inject constructor(
     private val repo: ConcertRepository
 ) : ViewModel() {
+
     private val _state = MutableStateFlow<UiState<List<Concert>>>(UiState.Loading)
     val state: StateFlow<UiState<List<Concert>>> = _state
 
@@ -28,3 +29,4 @@ class HomeViewModel @Inject constructor(
         )
     }
 }
+

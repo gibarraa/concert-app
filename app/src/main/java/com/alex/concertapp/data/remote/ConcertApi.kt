@@ -5,9 +5,13 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ConcertApi {
+
     @GET("concerts")
     suspend fun getConcerts(): List<ConcertDto>
 
     @GET("concerts/{id}")
     suspend fun getConcert(@Path("id") id: String): ConcertDto
+
+    @GET("favorites")
+    suspend fun getFavorites(): List<ConcertDto>
 }
