@@ -83,17 +83,22 @@ class MainActivity : ComponentActivity() {
                             PerfilScreen(navController = navController, viewModel = viewModel)
                         }
 
-                        composable<Purchase> {
+                        composable<Purchase> { backStackEntry ->
+                            val args = backStackEntry.toRoute<Purchase>()
                             PurchaseScreen(
                                 navController = navController,
-                                price = 50.0 // puedes pasar el precio real desde Detalle
+                                price = args.price,
+                                date = args.date
                             )
                         }
 
-                        composable<PurchaseConfirmed> {
-                            PurchaseConfirmedScreen(navController = navController)
+                        composable<PurchaseConfirmed> { backStackEntry ->
+                            val args = backStackEntry.toRoute<PurchaseConfirmed>()
+                            PurchaseConfirmedScreen(
+                                navController = navController,
+                                date = args.date
+                            )
                         }
-
 
 
                     }

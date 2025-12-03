@@ -69,7 +69,6 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
 
 
-
     val retrofit_version = "2.11.0"
     val coil_version = "2.6.0"
 
