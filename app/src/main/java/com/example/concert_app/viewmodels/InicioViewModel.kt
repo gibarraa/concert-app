@@ -12,7 +12,7 @@ data class InicioUiState(
     val isLoading: Boolean = false
 )
 
-class InicioViewModel : ViewModel(){
+class InicioViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow(InicioUiState())
 
