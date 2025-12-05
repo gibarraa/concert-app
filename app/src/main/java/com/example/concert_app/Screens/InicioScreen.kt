@@ -29,6 +29,7 @@ import com.example.concert_app.data.services.ConcertDto
 import com.example.concert_app.ui.theme.*
 import com.example.concert_app.viewmodels.InicioViewModel
 import com.example.concert_app.R
+import androidx.compose.ui.text.style.TextOverflow
 
 // IMPORTS PARA ANIMACIONES Y PRUEBAS
 import androidx.compose.animation.core.animateFloatAsState
@@ -163,9 +164,11 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
                     )
             )
             Text(
-                concert.title,
+                text = concert.title,
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold,
+                maxLines = 2, // Limita a 2 líneas máximo
+                overflow = TextOverflow.Ellipsis, // Pone "..." si es más largo
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(10.dp)
