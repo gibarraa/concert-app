@@ -8,6 +8,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.icons.filled.ConfirmationNumber
+// IMPORTS AÑADIDOS
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+// FIN IMPORTS AÑADIDOS
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -26,13 +30,30 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.concert_app.ui.theme.*
 import com.example.concert_app.viewmodels.DetalleViewModel
-import com.example.concert_app.ui.theme.Purchase   // ⭐ IMPORTANTE: ruta del destino
+import com.example.concert_app.ui.theme.Purchase
+// IMPORTS PARA ANIMACIÓN
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.Color
+// FIN IMPORTS PARA ANIMACIÓN
+
 
 @Composable
 fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleViewModel) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val concert = uiState.concert
+
+    // ⭐ NUEVO: ESTADO LOCAL DEL BOTÓN DE FAVORITO
+    var isFavorite by remember { mutableStateOf(false) }
+
+    // ⭐ NUEVO: LÓGICA DE ANIMACIÓN (Escala/Bote)
+    val scale by animateFloatAsState(
+        targetValue = if (isFavorite) 1.2f else 1.0f, // Escala a 120%
+        animationSpec = tween(durationMillis = 150),
+        label = "FavoriteScaleAnimation"
+    )
 
     Box(
         modifier = Modifier
@@ -128,6 +149,32 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
             }
 
             else -> Text("Error: Concierto no encontrado", color = ConcertWhite)
+        }
+
+        // ⭐ NUEVO: BOTÓN DE FAVORITO FLOTANTE CON ANIMACIÓN
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd) // Lo coloca en la esquina superior derecha del Box principal
+                .padding(top = 20.dp, end = 20.dp)
+                .size(50.dp)
+                .clickable {
+                    // Alternar el estado y disparar la animación
+                    isFavorite = !isFavorite
+                    // Aquí se integraría la lógica real del ViewModel para guardar el favorito
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                // Icono lleno si es favorito, bordeado si no lo es
+                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                contentDescription = "Favorite",
+                // Color primario si es favorito, blanco si no lo es
+                tint = if (isFavorite) PinkAccent else ConcertWhite,
+                modifier = Modifier
+                    .size(36.dp)
+                    // APLICACIÓN DE LA ANIMACIÓN DE ESCALA
+                    .graphicsLayer(scaleX = scale, scaleY = scale)
+            )
         }
     }
 }
