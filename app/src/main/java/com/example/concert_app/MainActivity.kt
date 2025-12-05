@@ -8,6 +8,8 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +20,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.toRoute
 import com.example.concert_app.Screens.DetalleScreen
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.example.concert_app.Screens.DetalleScreen
+//import com.example.concert_app.Screens.FavoritosScreen
 import com.example.concert_app.Screens.InicioScreen
 import com.example.concert_app.Screens.PerfilScreen
 import com.example.concert_app.ui.theme.ConcertappTheme
@@ -44,6 +53,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalAnimationApi::class)
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -65,6 +75,28 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { slideInFromLeft() },
                             popExitTransition = { slideOutToRight() }
                         ) {
+                val navController = rememberNavController()
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    NavHost(
+                        navController = navController,
+                        startDestination = Inicio,
+                        modifier = Modifier.padding(innerPadding),
+                        enterTransition = {
+                            slideInHorizontally(initialOffsetX = { 1000 }) + fadeIn()
+                        },
+
+                        exitTransition = {
+                            slideOutHorizontally(targetOffsetX = { -1000 }) + fadeOut()
+                        },
+
+                        popEnterTransition = {
+                            slideInHorizontally(initialOffsetX = { -1000 }) + fadeIn()
+                        },
+                        popExitTransition = {
+                            slideOutHorizontally(targetOffsetX = { 1000 }) + fadeOut()
+                        }
+                    ){
+                        composable<Inicio> {
                             val viewModel: InicioViewModel = viewModel()
                             InicioScreen(navController = navController, viewModel = viewModel)
                         }
@@ -75,6 +107,7 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { slideInFromLeft() },
                             popExitTransition = { slideOutToRight() }
                         ) { backStackEntry ->
+                        composable<Detalle> { backStackEntry ->
                             val args = backStackEntry.toRoute<Detalle>()
                             val viewModel: DetalleViewModel = viewModel()
                             DetalleScreen(args.id, navController = navController, viewModel = viewModel)
@@ -86,6 +119,7 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { slideInFromLeft() },
                             popExitTransition = { slideOutToRight() }
                         ) {
+                        composable<Favoritos> {
                             val viewModel: FavoritosViewModel = viewModel()
                             //FavoritosScreen(navController = navController, viewModel = viewModel)
                         }
@@ -96,6 +130,7 @@ class MainActivity : ComponentActivity() {
                             popEnterTransition = { slideInFromLeft() },
                             popExitTransition = { slideOutToRight() }
                         ) {
+                        composable<Perfil> {
                             val viewModel: PerfilViewModel = viewModel()
                             PerfilScreen(navController = navController, viewModel = viewModel)
                         }
@@ -149,3 +184,36 @@ private fun slideInFromLeft(duration: Int = animationDuration): EnterTransition 
 private fun slideOutToRight(duration: Int = animationDuration): ExitTransition {
     return slideOutHorizontally(animationSpec = tween(durationMillis = duration)) { fullWidth -> fullWidth }
 }
+                        composable<Purchase> { backStackEntry ->
+                            val args = backStackEntry.toRoute<Purchase>()
+                            PurchaseScreen(
+                                navController = navController,
+                                price = args.price,
+                                date = args.date
+                            )
+                        }
+
+                        composable<PurchaseConfirmed> { backStackEntry ->
+                            val args = backStackEntry.toRoute<PurchaseConfirmed>()
+                            PurchaseConfirmedScreen(
+                                navController = navController,
+                                date = args.date
+                            )
+                        }
+
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//@Preview(showBackground = true)
+//@Composable
+//fun GreetingPreview() {
+//    ConcertappTheme {
+//        InicioScreen(navController = rememberNavController(), viewModel { })
+//    }
+//}

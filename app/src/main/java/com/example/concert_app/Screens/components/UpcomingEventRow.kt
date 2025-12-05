@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import coil.compose.AsyncImage
 import com.example.concert_app.data.services.ConcertUi
+import com.example.concert_app.models.ConcertUi
 
 @Composable
 fun UpcomingEventRow(
@@ -37,6 +38,7 @@ fun UpcomingEventRow(
             Text(event.title, color = Color.White, fontWeight = FontWeight.Bold)
             Text(event.date, color = Color.LightGray)
             Text(event.city, color = Color.LightGray)
+            Text(event.venue, color = Color.LightGray)
         }
     }
 }

@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.material)
     implementation(libs.androidx.foundation)
+    implementation(libs.androidx.animation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,6 +68,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.material:material-icons-extended")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.36.0")
+
 
     val retrofit_version = "2.11.0"
     val coil_version = "2.6.0"

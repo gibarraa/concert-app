@@ -36,6 +36,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag // IMPORTANTE: Necesario para las pruebas
+import com.example.concert_app.ui.theme.*
+import com.example.concert_app.viewmodels.InicioViewModel
+import com.example.concert_app.R
+import com.example.concert_app.models.ConcertUi
 
 @Composable
 fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
@@ -52,6 +56,9 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
             .padding(16.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
             AsyncImage(
                 model = R.drawable.icono,
                 contentDescription = "ConcertApp Logo",
@@ -61,6 +68,9 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
                     .clip(MaterialTheme.shapes.small)
             )
             Spacer(Modifier.width(10.dp))
+
+            Spacer(Modifier.width(10.dp))
+
             Text(
                 "ConcertApp",
                 color = PinkAccent,
@@ -85,6 +95,7 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
                 CircularProgressIndicator(color = PinkAccent)
             }
         } else {
+
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(featured) { concert ->
                     FeaturedCard(concert) {
@@ -135,6 +146,8 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
         label = "FeaturedCardTranslation"
     )
 
+@Composable
+fun FeaturedCard(concert: ConcertUi, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .width(220.dp)
@@ -146,6 +159,7 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
             )
             // ESTA ES LA ETIQUETA QUE BUSCAN LAS PRUEBAS
             .testTag("featured_card"),
+            .clickable { onClick() },
     ) {
         Box {
             AsyncImage(
@@ -169,6 +183,9 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
                 fontWeight = FontWeight.SemiBold,
                 maxLines = 2, // Limita a 2 líneas máximo
                 overflow = TextOverflow.Ellipsis, // Pone "..." si es más largo
+                concert.title,
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold,
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .padding(10.dp)
@@ -193,6 +210,7 @@ fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
         label = "UpcomingCardTranslation"
     )
 
+fun UpcomingCard(concert: ConcertUi, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -220,6 +238,8 @@ fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
             Text(concert.title, color = Color.White, fontWeight = FontWeight.SemiBold)
             Text(concert.artistName, color = Color.Gray)
             Text("${concert.city} • ${concert.timeLocal}", color = Color.Gray)
+            Text(concert.artist, color = Color.Gray)
+            Text("${concert.venue} • ${concert.date}", color = Color.Gray)
         }
     }
 }
@@ -233,4 +253,5 @@ fun InicioPreview() {
             viewModel = InicioViewModel()
         )
     }
+}
 }

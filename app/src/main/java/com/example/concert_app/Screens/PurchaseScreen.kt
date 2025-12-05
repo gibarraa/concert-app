@@ -26,6 +26,7 @@ import com.example.concert_app.ui.theme.PurchaseConfirmed
 
 @Composable
 fun PurchaseScreen(navController: NavController, price: Double) {
+fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
     var selectedSection by remember { mutableStateOf("General Admission") }
     var ticketCount by remember { mutableStateOf(2) }
@@ -88,6 +89,7 @@ fun PurchaseScreen(navController: NavController, price: Double) {
                     .background(Color(0xFF2A1435))
                     .padding(horizontal = 18.dp)
                     .clickable { /* futuro dropdown */ },
+                    .clickable { /* */ },
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -142,6 +144,7 @@ fun PurchaseScreen(navController: NavController, price: Double) {
                 Spacer(Modifier.width(20.dp))
 
                 // COUNT DISPLAY
+
                 Box(
                     modifier = Modifier
                         .height(55.dp)
@@ -207,6 +210,7 @@ fun PurchaseScreen(navController: NavController, price: Double) {
                     .background(GradButton)
                     .clickable {
                         navController.navigate(PurchaseConfirmed)
+                        navController.navigate(PurchaseConfirmed(date = date))
                     },
                 contentAlignment = Alignment.Center
             ) {

@@ -106,6 +106,9 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
                     InfoRow(
                         icon = Icons.Default.CalendarMonth,
                         text = "${concert.dateUtc.take(10)}  ${concert.timeLocal}"
+                    InfoRow(
+                        icon = Icons.Default.CalendarMonth,
+                        text = "${concert.date.take(10)}  ${concert.venue}"
                     )
 
                     Spacer(Modifier.height(20.dp))
@@ -114,6 +117,9 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
                     InfoRow(
                         icon = Icons.Default.Place,
                         text = "${concert.city}, ${concert.country}"
+                    InfoRow(
+                        icon = Icons.Default.Place,
+                        text = "${concert.venue}"
                     )
 
                     Spacer(Modifier.height(20.dp))
@@ -122,6 +128,9 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
                     InfoRow(
                         icon = Icons.Default.ConfirmationNumber,
                         text = "From \$${concert.priceMin}.00"
+                    InfoRow(
+                        icon = Icons.Default.ConfirmationNumber,
+                        text = "From \$${concert.price}.00"
                     )
 
                     Spacer(Modifier.height(50.dp))
@@ -135,6 +144,8 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
                             .background(GradButton)
                             .clickable {
                                 navController.navigate(Purchase)
+                                navController.navigate(Purchase(price =
+                                    concert.price.toDouble(), date = concert.date))
                             },
                         contentAlignment = Alignment.Center
                     ) {
@@ -191,4 +202,5 @@ fun InfoRow(icon: ImageVector, text: String) {
         Spacer(Modifier.width(12.dp))
         Text(text, color = ConcertWhite, style = MaterialTheme.typography.titleMedium)
     }
+}
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import com.example.concert_app.R
 import com.example.concert_app.data.services.MockData
 import com.example.concert_app.data.services.ConcertUi
+import com.example.concert_app.models.ConcertUi
 import com.example.concert_app.ui.theme.ConcertBackground
 import com.example.concert_app.ui.theme.ConcertWhite
 import com.example.concert_app.Screens.components.FeaturedEventCard
@@ -41,6 +42,9 @@ fun HomeScreen(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = painterResource(id = R.drawable.logo), // Tu logo en drawable
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Image(
+                painter = painterResource(id = R.drawable.logo),
                 contentDescription = null,
                 modifier = Modifier.size(45.dp)
             )

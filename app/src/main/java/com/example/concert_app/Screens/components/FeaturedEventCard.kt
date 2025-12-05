@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.concert_app.data.services.ConcertUi
+import com.example.concert_app.models.ConcertUi
 
 @Composable
 fun FeaturedEventCard(
