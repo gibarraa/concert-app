@@ -19,6 +19,7 @@ import com.example.concert_app.R
 import com.example.concert_app.ui.theme.*
 
 @Composable
+fun PurchaseConfirmedScreen(navController: NavController) {
 fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
     Box(
@@ -39,6 +40,7 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
             Spacer(Modifier.height(40.dp))
 
+            // ⭐ LOGO
             androidx.compose.foundation.Image(
                 painter = painterResource(id = R.drawable.icono),
                 contentDescription = "logo",
@@ -48,6 +50,7 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
             Spacer(Modifier.height(20.dp))
 
+            // ⭐ TITLE
             Text(
                 text = "Purchase Confirmed",
                 color = ConcertWhite,
@@ -65,6 +68,7 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
             Spacer(Modifier.height(30.dp))
 
+            // ⭐ ORDER DETAILS TITLE
             Text(
                 text = "ORDER DETAILS",
                 color = PinkAccent,
@@ -74,6 +78,10 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
             Spacer(Modifier.height(26.dp))
 
+            // ⭐ ORDER NUMBER
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("Order Number", color = ConcertWhite)
+                Text("123456", color = ConcertWhite)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text("Order Number", color = ConcertWhite)
                 Text(orderNumber, color = ConcertWhite)
@@ -81,6 +89,9 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
             Spacer(Modifier.height(20.dp))
 
+            // ⭐ DATE + TIME
+            Text(
+                text = "Monday Dec 19, 2022  |  7:00 PM",
             Text(
                 text = date.take(10) + "  |  9:00 PM",
                 color = ConcertWhite,
@@ -89,6 +100,9 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
             Spacer(Modifier.height(20.dp))
 
+            // ⭐ EMAIL
+            Text(
+                text = "sm@example.com",
             Text(
                 text = userEmail,
                 color = ConcertWhite,
@@ -97,6 +111,7 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
 
             Spacer(Modifier.height(60.dp))
 
+            // ⭐ BOTÓN BACK TO HOME
 
             Box(
                 modifier = Modifier
@@ -106,6 +121,7 @@ fun PurchaseConfirmedScreen(navController: NavController, date: String) {
                     .background(GradButton)
                     .clickable {
                         navController.navigate(Inicio) {
+                            popUpTo(Inicio) { inclusive = true }  // 🚀 Limpia el stack y regresa al inicio
                             popUpTo(Inicio) { inclusive = true }
                         }
                     },

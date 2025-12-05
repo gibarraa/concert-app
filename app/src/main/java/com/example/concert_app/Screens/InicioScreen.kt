@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,6 +25,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.example.concert_app.data.services.ConcertDto
+import com.example.concert_app.ui.theme.*
+import com.example.concert_app.viewmodels.InicioViewModel
+import com.example.concert_app.R
+import androidx.compose.ui.text.style.TextOverflow
+
+// IMPORTS PARA ANIMACIONES Y PRUEBAS
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.testTag // IMPORTANTE: Necesario para las pruebas
 import com.example.concert_app.ui.theme.*
 import com.example.concert_app.viewmodels.InicioViewModel
 import com.example.concert_app.R
@@ -33,6 +45,7 @@ import com.example.concert_app.models.ConcertUi
 fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+
     val featured = uiState.value.concerts.take(4)
     val upcoming = uiState.value.concerts.filter { it !in featured }
 
@@ -42,6 +55,7 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
             .background(Brush.verticalGradient(listOf(DarkPurple, BlackBg)))
             .padding(16.dp)
     ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
 
@@ -53,6 +67,7 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
                     .size(42.dp)
                     .clip(MaterialTheme.shapes.small)
             )
+            Spacer(Modifier.width(10.dp))
 
             Spacer(Modifier.width(10.dp))
 
@@ -111,12 +126,39 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
     }
 }
 
+// ---------------------------------------------------------
+// CARD PARA DESTACADOS (CON TEST TAG)
+// ---------------------------------------------------------
+@Composable
+fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
+    // Lógica de Animación
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { visible = true }
+
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(durationMillis = 400),
+        label = "FeaturedCardAlpha"
+    )
+    val translationY: Float by animateFloatAsState(
+        targetValue = if (visible) 0f else 20f,
+        animationSpec = tween(durationMillis = 400),
+        label = "FeaturedCardTranslation"
+    )
+
 @Composable
 fun FeaturedCard(concert: ConcertUi, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .width(220.dp)
             .height(140.dp)
+            .clickable { onClick() }
+            .graphicsLayer(
+                alpha = alpha,
+                translationY = translationY
+            )
+            // ESTA ES LA ETIQUETA QUE BUSCAN LAS PRUEBAS
+            .testTag("featured_card"),
             .clickable { onClick() },
     ) {
         Box {
@@ -136,6 +178,11 @@ fun FeaturedCard(concert: ConcertUi, onClick: () -> Unit) {
                     )
             )
             Text(
+                text = concert.title,
+                color = Color.White,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 2, // Limita a 2 líneas máximo
+                overflow = TextOverflow.Ellipsis, // Pone "..." si es más largo
                 concert.title,
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold,
@@ -148,6 +195,21 @@ fun FeaturedCard(concert: ConcertUi, onClick: () -> Unit) {
 }
 
 @Composable
+fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { visible = true }
+
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(durationMillis = 400),
+        label = "UpcomingCardAlpha"
+    )
+    val translationY: Float by animateFloatAsState(
+        targetValue = if (visible) 0f else 20f,
+        animationSpec = tween(durationMillis = 400),
+        label = "UpcomingCardTranslation"
+    )
+
 fun UpcomingCard(concert: ConcertUi, onClick: () -> Unit) {
     Row(
         modifier = Modifier
@@ -157,6 +219,10 @@ fun UpcomingCard(concert: ConcertUi, onClick: () -> Unit) {
             .background(Color(0xFF1A1A1A))
             .clickable { onClick() }
             .padding(10.dp)
+            .graphicsLayer(
+                alpha = alpha,
+                translationY = translationY
+            )
     ) {
         AsyncImage(
             model = concert.imageUrl,
@@ -170,6 +236,8 @@ fun UpcomingCard(concert: ConcertUi, onClick: () -> Unit) {
 
         Column {
             Text(concert.title, color = Color.White, fontWeight = FontWeight.SemiBold)
+            Text(concert.artistName, color = Color.Gray)
+            Text("${concert.city} • ${concert.timeLocal}", color = Color.Gray)
             Text(concert.artist, color = Color.Gray)
             Text("${concert.venue} • ${concert.date}", color = Color.Gray)
         }
@@ -185,4 +253,5 @@ fun InicioPreview() {
             viewModel = InicioViewModel()
         )
     }
+}
 }
