@@ -26,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.concert_app.ui.theme.*
 import com.example.concert_app.viewmodels.DetalleViewModel
-import com.example.concert_app.ui.theme.Purchase   // ⭐ IMPORTANTE: ruta del destino
+import com.example.concert_app.ui.theme.Purchase
 
 @Composable
 fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleViewModel) {
@@ -51,7 +51,6 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
             concert != null -> {
                 Column(modifier = Modifier.fillMaxSize()) {
 
-                    // ⭐ TITULO PRINCIPAL
                     Text(
                         text = concert.title,
                         color = ConcertWhite,
@@ -68,7 +67,6 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
 
                     Spacer(Modifier.height(22.dp))
 
-                    // ⭐ IMAGEN
                     AsyncImage(
                         model = concert.imageUrl,
                         contentDescription = concert.title,
@@ -81,31 +79,27 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
 
                     Spacer(Modifier.height(30.dp))
 
-                    // 📅 FECHA
                     InfoRow(
                         icon = Icons.Default.CalendarMonth,
-                        text = "${concert.dateUtc.take(10)}  ${concert.timeLocal}"
+                        text = "${concert.date.take(10)}  ${concert.venue}"
                     )
 
                     Spacer(Modifier.height(20.dp))
 
-                    // 📍 LUGAR
                     InfoRow(
                         icon = Icons.Default.Place,
-                        text = "${concert.city}, ${concert.country}"
+                        text = "${concert.venue}"
                     )
 
                     Spacer(Modifier.height(20.dp))
 
-                    // 🎟️ PRECIO
                     InfoRow(
                         icon = Icons.Default.ConfirmationNumber,
-                        text = "From \$${concert.priceMin}.00"
+                        text = "From \$${concert.price}.00"
                     )
 
                     Spacer(Modifier.height(50.dp))
 
-                    // ⭐ BOTON BUY TICKETS — YA CON NAVEGACION REAL
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -113,7 +107,8 @@ fun DetalleScreen(id: String, navController: NavController, viewModel: DetalleVi
                             .clip(RoundedCornerShape(30.dp))
                             .background(GradButton)
                             .clickable {
-                                navController.navigate(Purchase)
+                                navController.navigate(Purchase(price =
+                                    concert.price.toDouble(), date = concert.date))
                             },
                         contentAlignment = Alignment.Center
                     ) {

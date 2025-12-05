@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,19 +24,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.concert_app.data.services.ConcertDto
 import com.example.concert_app.ui.theme.*
 import com.example.concert_app.viewmodels.InicioViewModel
 import com.example.concert_app.R
+import com.example.concert_app.models.ConcertUi
 
 @Composable
 fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-
-    // ---------------------------------------------------------
-    // ✔ NUEVO: SEPARAR FEATURED Y UPCOMING SIN DUPLICADOS
-    // ---------------------------------------------------------
     val featured = uiState.value.concerts.take(4)
     val upcoming = uiState.value.concerts.filter { it !in featured }
 
@@ -48,9 +43,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
             .padding(16.dp)
     ) {
 
-        // ---------------------------------------------------------
-        // 🔥 LOGO + NOMBRE APP (CON TU LOGO REAL logo.jpeg)
-        // ---------------------------------------------------------
         Row(verticalAlignment = Alignment.CenterVertically) {
 
             AsyncImage(
@@ -74,9 +66,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
         Spacer(Modifier.height(24.dp))
 
-        // ---------------------------------------------------------
-        // ⭐ EVENTOS DESTACADOS
-        // ---------------------------------------------------------
         Text(
             "Eventos Destacados",
             color = Color.White,
@@ -92,9 +81,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
             }
         } else {
 
-            // ---------------------------------------------------------
-            // 🔥 LISTA HORIZONTAL – DESTACADOS
-            // ---------------------------------------------------------
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(featured) { concert ->
                     FeaturedCard(concert) {
@@ -105,9 +91,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
             Spacer(Modifier.height(28.dp))
 
-            // ---------------------------------------------------------
-            // 🎵 PRÓXIMOS CONCIERTOS
-            // ---------------------------------------------------------
             Text(
                 "Próximos Conciertos",
                 color = Color.White,
@@ -128,12 +111,8 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
     }
 }
 
-//
-// ---------------------------------------------------------
-// 🔥 CARD PARA DESTACADOS
-// ---------------------------------------------------------
 @Composable
-fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
+fun FeaturedCard(concert: ConcertUi, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .width(220.dp)
@@ -168,12 +147,8 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
     }
 }
 
-//
-// ---------------------------------------------------------
-// 🔥 CARD PARA PRÓXIMOS CONCIERTOS
-// ---------------------------------------------------------
 @Composable
-fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
+fun UpcomingCard(concert: ConcertUi, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -195,8 +170,8 @@ fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
 
         Column {
             Text(concert.title, color = Color.White, fontWeight = FontWeight.SemiBold)
-            Text(concert.artistName, color = Color.Gray)
-            Text("${concert.city} • ${concert.timeLocal}", color = Color.Gray)
+            Text(concert.artist, color = Color.Gray)
+            Text("${concert.venue} • ${concert.date}", color = Color.Gray)
         }
     }
 }

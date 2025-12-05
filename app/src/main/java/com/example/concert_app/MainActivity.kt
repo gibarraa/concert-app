@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -44,7 +46,21 @@ class MainActivity : ComponentActivity() {
                     NavHost(
                         navController = navController,
                         startDestination = Inicio,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        enterTransition = {
+                            slideInHorizontally(initialOffsetX = { 1000 }) + fadeIn()
+                        },
+
+                        exitTransition = {
+                            slideOutHorizontally(targetOffsetX = { -1000 }) + fadeOut()
+                        },
+
+                        popEnterTransition = {
+                            slideInHorizontally(initialOffsetX = { -1000 }) + fadeIn()
+                        },
+                        popExitTransition = {
+                            slideOutHorizontally(targetOffsetX = { 1000 }) + fadeOut()
+                        }
                     ){
                         composable<Inicio> {
                             val viewModel: InicioViewModel = viewModel()
@@ -67,17 +83,22 @@ class MainActivity : ComponentActivity() {
                             PerfilScreen(navController = navController, viewModel = viewModel)
                         }
 
-                        composable<Purchase> {
+                        composable<Purchase> { backStackEntry ->
+                            val args = backStackEntry.toRoute<Purchase>()
                             PurchaseScreen(
                                 navController = navController,
-                                price = 50.0 // puedes pasar el precio real desde Detalle
+                                price = args.price,
+                                date = args.date
                             )
                         }
 
-                        composable<PurchaseConfirmed> {
-                            PurchaseConfirmedScreen(navController = navController)
+                        composable<PurchaseConfirmed> { backStackEntry ->
+                            val args = backStackEntry.toRoute<PurchaseConfirmed>()
+                            PurchaseConfirmedScreen(
+                                navController = navController,
+                                date = args.date
+                            )
                         }
-
 
 
                     }
