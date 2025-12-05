@@ -30,20 +30,17 @@ import com.example.concert_app.ui.theme.*
 import com.example.concert_app.viewmodels.InicioViewModel
 import com.example.concert_app.R
 
-// NUEVOS IMPORTS para animaciones
+// IMPORTS PARA ANIMACIONES Y PRUEBAS
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.graphics.graphicsLayer
-
+import androidx.compose.ui.platform.testTag // IMPORTANTE: Necesario para las pruebas
 
 @Composable
 fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ---------------------------------------------------------
-    // ✔ NUEVO: SEPARAR FEATURED Y UPCOMING SIN DUPLICADOS
-    // ---------------------------------------------------------
     val featured = uiState.value.concerts.take(4)
     val upcoming = uiState.value.concerts.filter { it !in featured }
 
@@ -53,12 +50,7 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
             .background(Brush.verticalGradient(listOf(DarkPurple, BlackBg)))
             .padding(16.dp)
     ) {
-
-        // ---------------------------------------------------------
-        // 🔥 LOGO + NOMBRE APP (CON TU LOGO REAL logo.jpeg)
-        // ---------------------------------------------------------
         Row(verticalAlignment = Alignment.CenterVertically) {
-
             AsyncImage(
                 model = R.drawable.icono,
                 contentDescription = "ConcertApp Logo",
@@ -67,9 +59,7 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
                     .size(42.dp)
                     .clip(MaterialTheme.shapes.small)
             )
-
             Spacer(Modifier.width(10.dp))
-
             Text(
                 "ConcertApp",
                 color = PinkAccent,
@@ -80,9 +70,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
         Spacer(Modifier.height(24.dp))
 
-        // ---------------------------------------------------------
-        // ⭐ EVENTOS DESTACADOS
-        // ---------------------------------------------------------
         Text(
             "Eventos Destacados",
             color = Color.White,
@@ -97,10 +84,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
                 CircularProgressIndicator(color = PinkAccent)
             }
         } else {
-
-            // ---------------------------------------------------------
-            // 🔥 LISTA HORIZONTAL – DESTACADOS
-            // ---------------------------------------------------------
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 items(featured) { concert ->
                     FeaturedCard(concert) {
@@ -111,9 +94,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
             Spacer(Modifier.height(28.dp))
 
-            // ---------------------------------------------------------
-            // 🎵 PRÓXIMOS CONCIERTOS
-            // ---------------------------------------------------------
             Text(
                 "Próximos Conciertos",
                 color = Color.White,
@@ -134,15 +114,14 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
     }
 }
 
-//
 // ---------------------------------------------------------
-// 🔥 CARD PARA DESTACADOS (CON ANIMACIÓN DE ENTRADA)
+// CARD PARA DESTACADOS (CON TEST TAG)
 // ---------------------------------------------------------
 @Composable
 fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
     // Lógica de Animación
     var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { visible = true } // Se dispara solo una vez al componer
+    LaunchedEffect(Unit) { visible = true }
 
     val alpha: Float by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
@@ -160,11 +139,12 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
             .width(220.dp)
             .height(140.dp)
             .clickable { onClick() }
-            // APLICACIÓN DE LA ANIMACIÓN
             .graphicsLayer(
                 alpha = alpha,
                 translationY = translationY
-            ),
+            )
+            // ESTA ES LA ETIQUETA QUE BUSCAN LAS PRUEBAS
+            .testTag("featured_card"),
     ) {
         Box {
             AsyncImage(
@@ -194,15 +174,10 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
     }
 }
 
-//
-// ---------------------------------------------------------
-// 🔥 CARD PARA PRÓXIMOS CONCIERTOS (CON ANIMACIÓN DE ENTRADA)
-// ---------------------------------------------------------
 @Composable
 fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
-    // Lógica de Animación
     var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { visible = true } // Se dispara solo una vez al componer
+    LaunchedEffect(Unit) { visible = true }
 
     val alpha: Float by animateFloatAsState(
         targetValue = if (visible) 1f else 0f,
@@ -223,7 +198,6 @@ fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
             .background(Color(0xFF1A1A1A))
             .clickable { onClick() }
             .padding(10.dp)
-            // APLICACIÓN DE LA ANIMACIÓN
             .graphicsLayer(
                 alpha = alpha,
                 translationY = translationY
