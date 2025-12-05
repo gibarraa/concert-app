@@ -30,6 +30,12 @@ import com.example.concert_app.ui.theme.*
 import com.example.concert_app.viewmodels.InicioViewModel
 import com.example.concert_app.R
 
+// NUEVOS IMPORTS para animaciones
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.ui.graphics.graphicsLayer
+
+
 @Composable
 fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
@@ -130,15 +136,35 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
 
 //
 // ---------------------------------------------------------
-// 🔥 CARD PARA DESTACADOS
+// 🔥 CARD PARA DESTACADOS (CON ANIMACIÓN DE ENTRADA)
 // ---------------------------------------------------------
 @Composable
 fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
+    // Lógica de Animación
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { visible = true } // Se dispara solo una vez al componer
+
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(durationMillis = 400),
+        label = "FeaturedCardAlpha"
+    )
+    val translationY: Float by animateFloatAsState(
+        targetValue = if (visible) 0f else 20f,
+        animationSpec = tween(durationMillis = 400),
+        label = "FeaturedCardTranslation"
+    )
+
     Card(
         modifier = Modifier
             .width(220.dp)
             .height(140.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            // APLICACIÓN DE LA ANIMACIÓN
+            .graphicsLayer(
+                alpha = alpha,
+                translationY = translationY
+            ),
     ) {
         Box {
             AsyncImage(
@@ -170,10 +196,25 @@ fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
 
 //
 // ---------------------------------------------------------
-// 🔥 CARD PARA PRÓXIMOS CONCIERTOS
+// 🔥 CARD PARA PRÓXIMOS CONCIERTOS (CON ANIMACIÓN DE ENTRADA)
 // ---------------------------------------------------------
 @Composable
 fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
+    // Lógica de Animación
+    var visible by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { visible = true } // Se dispara solo una vez al componer
+
+    val alpha: Float by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(durationMillis = 400),
+        label = "UpcomingCardAlpha"
+    )
+    val translationY: Float by animateFloatAsState(
+        targetValue = if (visible) 0f else 20f,
+        animationSpec = tween(durationMillis = 400),
+        label = "UpcomingCardTranslation"
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -182,6 +223,11 @@ fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
             .background(Color(0xFF1A1A1A))
             .clickable { onClick() }
             .padding(10.dp)
+            // APLICACIÓN DE LA ANIMACIÓN
+            .graphicsLayer(
+                alpha = alpha,
+                translationY = translationY
+            )
     ) {
         AsyncImage(
             model = concert.imageUrl,
