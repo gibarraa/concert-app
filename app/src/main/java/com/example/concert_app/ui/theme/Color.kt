@@ -14,11 +14,6 @@ val BlackBg = Color(0xFF000000)
 val PinkAccent = Color(0xFFFF4ADE)
 val GradPink = Brush.verticalGradient(listOf(Color(0xFFFF4ADE), Color(0xFFDA00C8)))
 
-// Colores adicionales necesarios para DetalleScreen
-val PurpleGrey40 = Color(0xFFB8A6D9)   // gris-morado suave para íconos
-val PurpleAccent = Color(0xFF9D4BFF)  // morado brillante del degradado del botón
-
-val PurpleGrey40 = Color(0xFFB8A6D9)
 val PurpleAccent = Color(0xFF9D4BFF)
 
 val GradButton = Brush.horizontalGradient(

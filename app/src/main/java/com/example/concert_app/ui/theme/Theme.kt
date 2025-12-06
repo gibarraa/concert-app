@@ -30,7 +30,6 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun ConcertappTheme(
-    darkTheme: Boolean = true, // Tu app es modo oscuro por diseño
     darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {

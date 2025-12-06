@@ -25,7 +25,6 @@ import com.example.concert_app.ui.theme.*
 import com.example.concert_app.ui.theme.PurchaseConfirmed
 
 @Composable
-fun PurchaseScreen(navController: NavController, price: Double) {
 fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
     var selectedSection by remember { mutableStateOf("General Admission") }
@@ -41,7 +40,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
         Column {
 
-            // LOGO + TITLE
             Row(verticalAlignment = Alignment.CenterVertically) {
 
                 androidx.compose.foundation.Image(
@@ -71,7 +69,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
             Spacer(Modifier.height(40.dp))
 
-            // SECTION LABEL
             Text(
                 "Section",
                 color = ConcertWhite,
@@ -80,7 +77,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
             Spacer(Modifier.height(10.dp))
 
-            // DROPDOWN SIMPLIFICADO
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -88,7 +84,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
                     .clip(RoundedCornerShape(18.dp))
                     .background(Color(0xFF2A1435))
                     .padding(horizontal = 18.dp)
-                    .clickable { /* futuro dropdown */ },
                     .clickable { /* */ },
                 contentAlignment = Alignment.CenterStart
             ) {
@@ -108,7 +103,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
             Spacer(Modifier.height(40.dp))
 
-            // NUMBER OF TICKETS
             Text(
                 "Number of Tickets",
                 color = ConcertWhite,
@@ -122,7 +116,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
                 modifier = Modifier.fillMaxWidth()
             ) {
 
-                // MINUS
                 Box(
                     modifier = Modifier
                         .size(55.dp)
@@ -143,7 +136,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
                 Spacer(Modifier.width(20.dp))
 
-                // COUNT DISPLAY
 
                 Box(
                     modifier = Modifier
@@ -201,7 +193,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
 
             Spacer(Modifier.height(40.dp))
 
-            // ⭐ PAY BUTTON → Navega a PurchaseConfirmed
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -209,7 +200,6 @@ fun PurchaseScreen(navController: NavController, price: Double, date: String) {
                     .clip(RoundedCornerShape(30.dp))
                     .background(GradButton)
                     .clickable {
-                        navController.navigate(PurchaseConfirmed)
                         navController.navigate(PurchaseConfirmed(date = date))
                     },
                 contentAlignment = Alignment.Center
