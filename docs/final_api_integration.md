@@ -21,4 +21,4 @@ La app quedó integrada con la API real de conciertos:
   - Información del concierto, precio y botón de compra.
 - Cache y favoritos:
   - Room guarda conciertos.
-  - Se pueden leer favoritos desde la base local.
+  - Se pueden leer favoritos desde la base local cuando falla la red.
