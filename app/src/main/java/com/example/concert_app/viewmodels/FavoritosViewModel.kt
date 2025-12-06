@@ -16,7 +16,6 @@ class FavoritosViewModel : ViewModel(){
     val uiState: StateFlow<FavoritosUIState> = _uiState.asStateFlow()
 
     init {
-        // Por ahora, simulamos que el primer concierto es favorito
         _uiState.value = FavoritosUIState(
             favoriteConcerts = listOf(MockData.mockConcerts.first())
         )

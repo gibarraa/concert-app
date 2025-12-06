@@ -24,8 +24,6 @@ class PerfilViewModel : ViewModel(){
             user = UserProfile(
                 name = "Juan Marquez",
                 email = "juan@ticketMaster.com",
-                name = "Ibarra",
-                email = "ibarra@ticketMaster.com",
                 profileImageUrl = "https://picsum.photos/seed/user/300/300"
             )
         )

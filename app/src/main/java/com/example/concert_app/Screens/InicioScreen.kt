@@ -1,5 +1,7 @@
 package com.example.concert_app.Screens
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -7,39 +9,32 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.concert_app.data.services.ConcertDto
-import com.example.concert_app.ui.theme.*
-import com.example.concert_app.viewmodels.InicioViewModel
 import com.example.concert_app.R
-import androidx.compose.ui.text.style.TextOverflow
-
-// IMPORTS PARA ANIMACIONES Y PRUEBAS
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.testTag // IMPORTANTE: Necesario para las pruebas
-import com.example.concert_app.ui.theme.*
-import com.example.concert_app.viewmodels.InicioViewModel
-import com.example.concert_app.R
+import com.example.concert_app.Screens.components.FeaturedCard
+import com.example.concert_app.Screens.components.UpcomingCard
 import com.example.concert_app.models.ConcertUi
+import com.example.concert_app.ui.theme.*
+import com.example.concert_app.viewmodels.InicioViewModel
 
 @Composable
 fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
@@ -55,10 +50,8 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
             .background(Brush.verticalGradient(listOf(DarkPurple, BlackBg)))
             .padding(16.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-
             AsyncImage(
                 model = R.drawable.icono,
                 contentDescription = "ConcertApp Logo",
@@ -68,9 +61,6 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
                     .clip(MaterialTheme.shapes.small)
             )
             Spacer(Modifier.width(10.dp))
-
-            Spacer(Modifier.width(10.dp))
-
             Text(
                 "ConcertApp",
                 color = PinkAccent,
@@ -126,123 +116,7 @@ fun InicioScreen(navController: NavController, viewModel: InicioViewModel) {
     }
 }
 
-// ---------------------------------------------------------
-// CARD PARA DESTACADOS (CON TEST TAG)
-// ---------------------------------------------------------
-@Composable
-fun FeaturedCard(concert: ConcertDto, onClick: () -> Unit) {
-    // Lógica de Animación
-    var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { visible = true }
 
-    val alpha: Float by animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = 400),
-        label = "FeaturedCardAlpha"
-    )
-    val translationY: Float by animateFloatAsState(
-        targetValue = if (visible) 0f else 20f,
-        animationSpec = tween(durationMillis = 400),
-        label = "FeaturedCardTranslation"
-    )
-
-@Composable
-fun FeaturedCard(concert: ConcertUi, onClick: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .width(220.dp)
-            .height(140.dp)
-            .clickable { onClick() }
-            .graphicsLayer(
-                alpha = alpha,
-                translationY = translationY
-            )
-            // ESTA ES LA ETIQUETA QUE BUSCAN LAS PRUEBAS
-            .testTag("featured_card"),
-            .clickable { onClick() },
-    ) {
-        Box {
-            AsyncImage(
-                model = concert.imageUrl,
-                contentDescription = concert.title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .background(
-                        Brush.verticalGradient(
-                            listOf(Color.Transparent, Color(0xAA000000))
-                        )
-                    )
-            )
-            Text(
-                text = concert.title,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                maxLines = 2, // Limita a 2 líneas máximo
-                overflow = TextOverflow.Ellipsis, // Pone "..." si es más largo
-                concert.title,
-                color = Color.White,
-                fontWeight = FontWeight.SemiBold,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(10.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun UpcomingCard(concert: ConcertDto, onClick: () -> Unit) {
-    var visible by remember { mutableStateOf(false) }
-    LaunchedEffect(Unit) { visible = true }
-
-    val alpha: Float by animateFloatAsState(
-        targetValue = if (visible) 1f else 0f,
-        animationSpec = tween(durationMillis = 400),
-        label = "UpcomingCardAlpha"
-    )
-    val translationY: Float by animateFloatAsState(
-        targetValue = if (visible) 0f else 20f,
-        animationSpec = tween(durationMillis = 400),
-        label = "UpcomingCardTranslation"
-    )
-
-fun UpcomingCard(concert: ConcertUi, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp)
-            .clip(MaterialTheme.shapes.medium)
-            .background(Color(0xFF1A1A1A))
-            .clickable { onClick() }
-            .padding(10.dp)
-            .graphicsLayer(
-                alpha = alpha,
-                translationY = translationY
-            )
-    ) {
-        AsyncImage(
-            model = concert.imageUrl,
-            contentDescription = concert.title,
-            modifier = Modifier
-                .width(100.dp)
-                .clip(MaterialTheme.shapes.medium),
-            contentScale = ContentScale.Crop
-        )
-        Spacer(Modifier.width(12.dp))
-
-        Column {
-            Text(concert.title, color = Color.White, fontWeight = FontWeight.SemiBold)
-            Text(concert.artistName, color = Color.Gray)
-            Text("${concert.city} • ${concert.timeLocal}", color = Color.Gray)
-            Text(concert.artist, color = Color.Gray)
-            Text("${concert.venue} • ${concert.date}", color = Color.Gray)
-        }
-    }
-}
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
@@ -253,5 +127,4 @@ fun InicioPreview() {
             viewModel = InicioViewModel()
         )
     }
-}
 }

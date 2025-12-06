@@ -15,11 +15,6 @@ object Favoritos
 object Perfil
 
 @Serializable
-object Purchase
-
-
-@Serializable
-object PurchaseConfirmed
 data class Purchase(val price: Double, val date: String)
 
 @Serializable
